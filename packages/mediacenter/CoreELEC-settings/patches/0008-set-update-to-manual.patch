@@ -1,0 +1,37 @@
+From 1623f3c0ee40b007287fef9a924e0a86ccdcdb75 Mon Sep 17 00:00:00 2001
+From: Eminent-Online <info@eminent-online.com>
+Date: Fri, 8 Mar 2019 00:36:07 +0300
+Subject: [PATCH 08/10] set update to manual
+
+---
+ src/resources/lib/modules/updates.py | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/src/resources/lib/modules/updates.py b/src/resources/lib/modules/updates.py
+index 4944f6c..e578577 100644
+--- a/src/resources/lib/modules/updates.py
++++ b/src/resources/lib/modules/updates.py
+@@ -44,10 +44,10 @@ class updates:
+                     'settings': {
+                         'AutoUpdate': {
+                             'name': 32014,
+-                            'value': 'auto',
++                            'value': 'manual',
+                             'action': 'set_auto_update',
+                             'type': 'multivalue',
+-                            'values': ['auto', 'manual'],
++                            'values': ['manual', 'auto'],
+                             'InfoText': 714,
+                             'order': 1,
+                             },
+@@ -117,7 +117,7 @@ class updates:
+                             },
+                         'Channel': {
+                             'name': 32015,
+-                            'value': '',
++                            'value': 'CoreELEC-9.0',
+                             'action': 'set_channel',
+                             'type': 'multivalue',
+                             'parent': {
+--
+2.7.4

@@ -1,0 +1,73 @@
+From e216e1cb1d1548bae83d8d5c6522016480d47853 Mon Sep 17 00:00:00 2001
+From: Eminent-Online <info@eminent-online.com>
+Date: Sat, 30 Mar 2019 12:37:42 +0300
+Subject: [PATCH 02/11] update server url
+
+---
+ src/defaults.py                      | 4 ++--
+ src/oe.py                            | 9 +++++++++
+ src/resources/lib/modules/updates.py | 4 ++--
+ 3 files changed, 13 insertions(+), 4 deletions(-)
+
+diff --git a/src/defaults.py b/src/defaults.py
+index a3114d3..7692b1e 100644
+--- a/src/defaults.py
++++ b/src/defaults.py
+@@ -78,8 +78,8 @@ system = {
+
+ updates = {
+     'ENABLED': True,
+-    'UPDATE_REQUEST_URL': 'https://update.coreelec.org/updates.php',
+-    'UPDATE_DOWNLOAD_URL': 'https://%s/%s/%s',
++    'UPDATE_REQUEST_URL': 'http://update.amlinux.ru/update.php',
++    'UPDATE_DOWNLOAD_URL': 'http://%s.amlinux.ru/%s',
+     'LOCAL_UPDATE_DIR': '/storage/.update/',
+     }
+
+diff --git a/src/oe.py b/src/oe.py
+index f5d37f1..0e03ece 100644
+--- a/src/oe.py
++++ b/src/oe.py
+@@ -21,6 +21,7 @@ import dbus
+ import dbus.mainloop.glib
+ import defaults
+ import shutil
++import base64
+
+ from xml.dom import minidom
+
+@@ -821,6 +822,14 @@ if os.path.exists('/etc/machine-id'):
+ else:
+     SYSTEMID = os.environ.get('SYSTEMID', '')
+
++if os.path.exists('/sys/class/net/eth0/address'):
++    fileMac = open("/sys/class/net/eth0/address","r")
++    rmac = fileMac.read()
++    fileMac.close()
++else:
++    rmac = "00:00:00:00:00:00"
++LANMAC = base64.b64encode(rmac.rstrip('\n'))
++
+ BOOT_STATUS = load_file('/storage/.config/boot.status')
+
+ ############################################################################################
+diff --git a/src/resources/lib/modules/updates.py b/src/resources/lib/modules/updates.py
+index 69c4600..3f11c04 100644
+--- a/src/resources/lib/modules/updates.py
++++ b/src/resources/lib/modules/updates.py
+@@ -502,11 +502,11 @@ class updates:
+                 version = self.oe.VERSION
+             url = '%s?i=%s&d=%s&pa=%s&v=%s&f=%s' % (
+                 self.UPDATE_REQUEST_URL,
+-                self.oe.url_quote(systemid),
++                self.oe.url_quote(self.oe.LANMAC),
+                 self.oe.url_quote(self.oe.DISTRIBUTION),
+                 self.oe.url_quote(self.oe.ARCHITECTURE),
+                 self.oe.url_quote(version),
+-                self.oe.url_quote(self.hardware_flags),
++                self.oe.url_quote(self.oe.DEVICE),
+                 )
+             if self.oe.BUILDER_NAME:
+                url += '&b=%s' % self.oe.url_quote(self.oe.BUILDER_NAME)
+--
+2.7.4

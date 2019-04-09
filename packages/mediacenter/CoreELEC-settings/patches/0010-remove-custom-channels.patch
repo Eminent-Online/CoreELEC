@@ -1,0 +1,135 @@
+From 0b523e178fe0ceb65270224844464b14523960e2 Mon Sep 17 00:00:00 2001
+From: Eminent-Online <info@eminent-online.com>
+Date: Sat, 30 Mar 2019 12:48:40 +0300
+Subject: [PATCH 10/11] remove custom channels
+
+---
+ src/resources/lib/modules/updates.py | 92 ------------------------------------
+ 1 file changed, 92 deletions(-)
+
+diff --git a/src/resources/lib/modules/updates.py b/src/resources/lib/modules/updates.py
+index e578577..fe35e9d 100644
+--- a/src/resources/lib/modules/updates.py
++++ b/src/resources/lib/modules/updates.py
+@@ -67,54 +67,6 @@ class updates:
+                             'InfoText': 715,
+                             'order': 3,
+                             },
+-                        'ShowCustomChannels': {
+-                            'name': 32016,
+-                            'value': '0',
+-                            'action': 'set_custom_channel',
+-                            'type': 'bool',
+-                            'parent': {
+-                                'entry': 'AutoUpdate',
+-                                'value': ['manual'],
+-                                },
+-                            'InfoText': 761,
+-                            'order': 4,
+-                            },
+-                        'CustomChannel1': {
+-                            'name': 32017,
+-                            'value': '',
+-                            'action': 'set_custom_channel',
+-                            'type': 'text',
+-                            'parent': {
+-                                'entry': 'ShowCustomChannels',
+-                                'value': ['1'],
+-                                },
+-                            'InfoText': 762,
+-                            'order': 5,
+-                            },
+-                        'CustomChannel2': {
+-                            'name': 32018,
+-                            'value': '',
+-                            'action': 'set_custom_channel',
+-                            'type': 'text',
+-                            'parent': {
+-                                'entry': 'ShowCustomChannels',
+-                                'value': ['1'],
+-                                },
+-                            'InfoText': 762,
+-                            'order': 6,
+-                            },
+-                        'CustomChannel3': {
+-                            'name': 32019,
+-                            'value': '',
+-                            'action': 'set_custom_channel',
+-                            'type': 'text',
+-                            'parent': {
+-                                'entry': 'ShowCustomChannels',
+-                                'value': ['1'],
+-                                },
+-                            'InfoText': 762,
+-                            'order': 7,
+-                            },
+                         'Channel': {
+                             'name': 32015,
+                             'value': 'LibreELEC-9.0',
+@@ -283,19 +235,6 @@ class updates:
+             value = self.oe.read_setting('updates', 'Channel')
+             if not value is None:
+                 self.struct['update']['settings']['Channel']['value'] = value
+-            value = self.oe.read_setting('updates', 'ShowCustomChannels')
+-            if not value is None:
+-                self.struct['update']['settings']['ShowCustomChannels']['value'] = value
+-
+-            value = self.oe.read_setting('updates', 'CustomChannel1')
+-            if not value is None:
+-                self.struct['update']['settings']['CustomChannel1']['value'] = value
+-            value = self.oe.read_setting('updates', 'CustomChannel2')
+-            if not value is None:
+-                self.struct['update']['settings']['CustomChannel2']['value'] = value
+-            value = self.oe.read_setting('updates', 'CustomChannel3')
+-            if not value is None:
+-                self.struct['update']['settings']['CustomChannel3']['value'] = value
+
+             self.update_json = self.build_json()
+
+@@ -358,27 +297,6 @@ class updates:
+         except Exception, e:
+             self.oe.dbg_log('updates::set_channel', 'ERROR: (' + repr(e) + ')')
+
+-    def set_custom_channel(self, listItem=None):
+-        try:
+-            self.oe.dbg_log('updates::set_custom_channel', 'enter_function', 0)
+-            if not listItem == None:
+-                self.set_value(listItem)
+-            if listItem.getProperty('entry') != 'ShowCustomChannels':
+-                if self.get_json(listItem.getProperty('value')) is None:
+-                    xbmcDialog = xbmcgui.Dialog()
+-                    xbmcDialog.ok('CoreELEC Update', self.oe._(32191).encode('utf-8'))
+-                    xbmcDialog = None
+-                    del xbmcDialog
+-            self.update_json = self.build_json()
+-            self.struct['update']['settings']['Channel']['values'] = self.get_channels()
+-            if not self.struct['update']['settings']['Channel']['values'] is None:
+-                if not self.struct['update']['settings']['Channel']['value'] in self.struct['update']['settings']['Channel']['values']:
+-                    self.struct['update']['settings']['Channel']['value'] = None
+-            self.struct['update']['settings']['Build']['values'] = self.get_available_builds()
+-            self.oe.dbg_log('updates::set_custom_channel', 'exit_function', 0)
+-        except Exception, e:
+-            self.oe.dbg_log('updates::set_custom_channel', 'ERROR: (' + repr(e) + ')')
+-
+     def get_channels(self):
+         try:
+             self.oe.dbg_log('updates::get_channels', 'enter_function', 0)
+@@ -447,16 +365,6 @@ class updates:
+         try:
+             self.oe.dbg_log('updates::build_json', 'enter_function', 0)
+             update_json = self.get_json()
+-            if self.struct['update']['settings']['ShowCustomChannels']['value'] == '1':
+-                custom_urls = []
+-                for i in 1,2,3:
+-                    custom_urls.append(self.struct['update']['settings']['CustomChannel' + str(i)]['value'])
+-                for custom_url in custom_urls:
+-                    if custom_url != '':
+-                        custom_update_json = self.get_json(custom_url)
+-                        if not custom_update_json is None:
+-                            for channel in custom_update_json:
+-                                update_json[channel] = custom_update_json[channel]
+             self.oe.dbg_log('updates::build_json', 'exit_function', 0)
+             return update_json
+         except Exception, e:
+--
+2.7.4

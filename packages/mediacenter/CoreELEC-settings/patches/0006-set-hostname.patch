@@ -1,0 +1,24 @@
+From c784c0016e2e7d173b8915d41ef7f2dd8611c120 Mon Sep 17 00:00:00 2001
+From: Eminent-Online <info@eminent-online.com>
+Date: Thu, 7 Mar 2019 23:50:47 +0300
+Subject: [PATCH 06/11] set hostname
+
+---
+ src/resources/lib/modules/system.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/resources/lib/modules/system.py b/src/resources/lib/modules/system.py
+index 0f26cd7..1e1464b 100644
+--- a/src/resources/lib/modules/system.py
++++ b/src/resources/lib/modules/system.py
+@@ -338,7 +338,7 @@ class system:
+             if not value is None:
+                 self.struct['ident']['settings']['hostname']['value'] = value
+             else:
+-                self.struct['ident']['settings']['hostname']['value'] = self.oe.DISTRIBUTION
++                self.struct['ident']['settings']['hostname']['value'] = self.oe.DEVICE
+         except Exception, e:
+             self.oe.dbg_log('system::load_values', 'ERROR: (' + repr(e) + ')')
+
+--
+2.7.4

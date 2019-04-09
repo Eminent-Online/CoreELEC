@@ -1,0 +1,67 @@
+From bcb2a1124532ebf45f8cac0b5a339a5148561dfa Mon Sep 17 00:00:00 2001
+From: Eminent-Online <info@eminent-online.com>
+Date: Thu, 14 Feb 2019 12:10:17 +0300
+Subject: [PATCH 01/11] device info
+
+---
+ .../1080i/service-CoreELEC-Settings-mainWindow.xml | 22 +++++++++++++++++++++-
+ src/resources/lib/oeWindows.py                     |  2 ++
+ 2 files changed, 23 insertions(+), 1 deletion(-)
+
+diff --git a/skins/Default/1080i/service-CoreELEC-Settings-mainWindow.xml b/skins/Default/1080i/service-CoreELEC-Settings-mainWindow.xml
+index 2899ffe..8f3ba86 100644
+--- a/skins/Default/1080i/service-CoreELEC-Settings-mainWindow.xml
++++ b/skins/Default/1080i/service-CoreELEC-Settings-mainWindow.xml
+@@ -182,9 +182,29 @@
+                         <aligny>center</aligny>
+                         <label>$INFO[Window.Property(Arch)]</label>
+                     </control>
+-                    <control type="textbox">
++                    <control type="label">
+                         <left>60</left>
+                         <top>170</top>
++                        <width>300</width>
++                        <height>16</height>
++                        <textcolor>blue</textcolor>
++                        <align>left</align>
++                        <aligny>center</aligny>
++                        <label>Device:</label>
++                    </control>
++                    <control type="label">
++                        <left>300</left>
++                        <top>170</top>
++                        <width>500</width>
++                        <height>16</height>
++                        <textcolor>white</textcolor>
++                        <align>left</align>
++                        <aligny>center</aligny>
++                        <label>$INFO[Window.Property(Device)]</label>
++                    </control>
++                    <control type="textbox">
++                        <left>60</left>
++                        <top>200</top>
+                         <width>1200</width>
+                         <height>260</height>
+                         <font>font10</font>
+diff --git a/src/resources/lib/oeWindows.py b/src/resources/lib/oeWindows.py
+index 03783d0..42f28d0 100644
+--- a/src/resources/lib/oeWindows.py
++++ b/src/resources/lib/oeWindows.py
+@@ -72,6 +72,7 @@ class mainWindow(xbmcgui.WindowXMLDialog):
+             self.setProperty('arch', self.oe.ARCHITECTURE)
+             self.setProperty('distri', self.oe.DISTRIBUTION)
+             self.setProperty('version', self.oe.VERSION)
++            self.setProperty('device', self.oe.DEVICE)
+             self.setProperty('build', self.oe.BUILD)
+             self.setProperty('DIST_MEDIA', 'default')
+             if os.path.exists(self.oe.__media__ + self.oe.DISTRIBUTION):
+@@ -474,6 +475,7 @@ class wizard(xbmcgui.WindowXMLDialog):
+             self.setProperty('arch', self.oe.ARCHITECTURE)
+             self.setProperty('distri', self.oe.DISTRIBUTION)
+             self.setProperty('version', self.oe.VERSION)
++            self.setProperty('device', self.oe.DEVICE)
+             self.setProperty('build', self.oe.BUILD)
+             self.setProperty('DIST_MEDIA', 'default')
+             if os.path.exists(self.oe.__media__ + self.oe.DISTRIBUTION):
+--
+2.7.4

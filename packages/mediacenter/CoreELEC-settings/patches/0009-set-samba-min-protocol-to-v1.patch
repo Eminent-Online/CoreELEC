@@ -1,0 +1,24 @@
+From caa809e275618c57bc48f0cc5c8075b741c4ac7b Mon Sep 17 00:00:00 2001
+From: Eminent-Online <info@eminent-online.com>
+Date: Fri, 8 Mar 2019 00:46:46 +0300
+Subject: [PATCH 09/11] set samba min protocol to v1
+
+---
+ src/resources/lib/modules/services.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/resources/lib/modules/services.py b/src/resources/lib/modules/services.py
+index c259267..82e90a2 100644
+--- a/src/resources/lib/modules/services.py
++++ b/src/resources/lib/modules/services.py
+@@ -107,7 +107,7 @@ class services:
+                         'samba_minprotocol': {
+                             'order': 6,
+                             'name': 32217,
+-                            'value': 'SMB2',
++                            'value': 'SMB1',
+                             'action': 'initialize_samba',
+                             'type': 'multivalue',
+                             'values': [
+--
+2.7.4

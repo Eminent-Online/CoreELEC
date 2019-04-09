@@ -60,8 +60,8 @@ if [ -n "$CUSTOM_VERSION" ]; then
   LIBREELEC_VERSION="$CUSTOM_VERSION"
 fi
 
-LIBREELEC_ARCH="${DEVICE:-$PROJECT}.$TARGET_ARCH"
-TARGET_VERSION="$LIBREELEC_ARCH-$LIBREELEC_VERSION"
+LIBREELEC_ARCH="$PROJECT.$TARGET_ARCH"
+TARGET_VERSION="$LIBREELEC_ARCH-$DEVICE-$LIBREELEC_VERSION"
 
 if [ -n "$CUSTOM_IMAGE_NAME" ]; then
   IMAGE_NAME="$CUSTOM_IMAGE_NAME"
@@ -109,6 +109,7 @@ if [ "$TARGET_ARCH" = "x86_64" ]; then
 fi
 
 echo "$TARGET_VERSION" > $INSTALL/etc/release
+echo "$DEVICE" > $INSTALL/etc/device
 
 # create /etc/os-release
 echo -e "NAME=\"$DISTRONAME\"" > $INSTALL/etc/os-release
@@ -120,8 +121,12 @@ echo -e "HOME_URL=\"https://coreelec.org\"" >> $INSTALL/etc/os-release
 echo -e "BUG_REPORT_URL=\"$ORIGIN_URL\"" >> $INSTALL/etc/os-release
 echo -e "BUILD_ID=\"$GIT_HASH\"" >> $INSTALL/etc/os-release
 echo -e "COREELEC_ARCH=\"$LIBREELEC_ARCH\"" >> $INSTALL/etc/os-release
+echo -e "LIBREELEC_ARCH=\"$LIBREELEC_ARCH\"" >> $INSTALL/etc/os-release
 echo -e "COREELEC_BUILD=\"$LIBREELEC_BUILD\"" >> $INSTALL/etc/os-release
+echo -e "LIBREELEC_BUILD=\"$LIBREELEC_BUILD\"" >> $INSTALL/etc/os-release
 echo -e "COREELEC_PROJECT=\"$PROJECT\"" >> $INSTALL/etc/os-release
+echo -e "LIBREELEC_PROJECT=\"$PROJECT\"" >> $INSTALL/etc/os-release
+[ -n "$DEVICE" ] && echo -e "DEVICE=\"$DEVICE\"" >> $INSTALL/etc/os-release
 [ -n "$DEVICE" ] && echo -e "COREELEC_DEVICE=\"$DEVICE\"" >> $INSTALL/etc/os-release
 [ -n "$BUILDER_NAME" ] && echo -e "BUILDER_NAME=\"$BUILDER_NAME\"" >> $INSTALL/etc/os-release
 [ -n "$BUILDER_VERSION" ] && echo -e "BUILDER_VERSION=\"$BUILDER_VERSION\"" >> $INSTALL/etc/os-release
@@ -266,9 +271,15 @@ rm -rf $FAKEROOT_SCRIPT
 # set permissions
 chmod 0644 $TARGET_IMG/$IMAGE_NAME.system
 
-if [ "$1" = "release" -o "$1" = "mkimage" -o "$1" = "amlpkg" -o "$1" = "noobs" ]; then
+if [ "$1" = "release" -o "$1" = "mkimage" -o "$1" = "amlpkg" -o "$1" = "noobs" -o "$1" = "amlimg" ]; then
 
   RELEASE_DIR="target/$IMAGE_NAME"
+
+  if [ -n "$DEVICE" -a -d "$PROJECT_DIR/$PROJECT/devices/$DEVICE/install" ]; then
+    INSTALL_SRC_DIR="$PROJECT_DIR/$PROJECT/devices/$DEVICE/install"
+  else
+    INSTALL_SRC_DIR="$PROJECT_DIR/$PROJECT/install"
+  fi
 
   # cleanup
   rm -rf $RELEASE_DIR
@@ -323,13 +334,8 @@ if [ "$1" = "release" -o "$1" = "mkimage" -o "$1" = "amlpkg" -o "$1" = "noobs" ]
   # create release tarball
   tar cf $TARGET_IMG/$IMAGE_NAME.tar -C target $IMAGE_NAME
 
-  # create sha256 checksum of tarball
-  ( cd $TARGET_IMG
-    sha256sum ${IMAGE_NAME}.tar > ${IMAGE_NAME}.tar.sha256
-  )
-
   # create image files if requested
-  if [[ ( "$1" = "amlpkg" || "$1" = "noobs" || "$1" = "mkimage" ) && -n "$BOOTLOADER" ]]; then
+  if [[ ( "$1" = "noobs" || "$1" = "mkimage" ) && -n "$BOOTLOADER" ]]; then
     # INSTALL_SRC_DIR can be board specific
     if [ -n "$DEVICE" -a -d "$PROJECT_DIR/$PROJECT/devices/$DEVICE/install" ]; then
       INSTALL_SRC_DIR="$PROJECT_DIR/$PROJECT/devices/$DEVICE/install"
@@ -403,6 +409,50 @@ if [ "$1" = "release" -o "$1" = "mkimage" -o "$1" = "amlpkg" -o "$1" = "noobs" ]
   # cleanup release dir
   rm -rf $RELEASE_DIR
 
+  # create Amlogic img file for USB Burning Tool
+  if [ "$1" = "amlimg" ]; then
+    if [ -d "$INSTALL_SRC_DIR/upgrade" ]; then
+      echo "Creating Amlogic IMG"
+
+      AML_IMG_DIR="$RELEASE_DIR/aml-img"
+
+      # create img directory
+      mkdir -p "$AML_IMG_DIR"
+
+      if [ AMLIMG_SYSTEM_SIZE == "" ]; then
+          pushd "$BUILD/linux-$(kernel_version)" > /dev/null
+          DTB_BLOBS=($(ls arch/$TARGET_KERNEL_ARCH/boot/dts/amlogic/*.dtb 2>/dev/null || true))
+          DTB_PART="arch/$TARGET_KERNEL_ARCH/boot/dts/amlogic/partition_mbox.dtsi"
+
+          if [ -f $DTB_PART ]; then
+              AMLIMG_SYSTEM_HEX_SIZE=($(awk '/pname = \"system\"/ { getline;print $4 }' $DTB_PART | tr -d ">;" ))
+              AMLIMG_SYSTEM_SIZE=$(echo $((${AMLIMG_SYSTEM_HEX_SIZE} / 1024)))
+          else
+            for i in "$DTB_BLOBS"; do
+              AMLIMG_SYSTEM_HEX_SIZE=($(awk '/pname = \"system\"/ { getline;print $4 }' $(sed 's/dtb/dts/g' <<< $i) | tr -d ">;" ))
+              AMLIMG_SYSTEM_SIZE=$(echo $((${AMLIMG_SYSTEM_HEX_SIZE} / 1024)))
+            done
+          fi
+          popd > /dev/null
+      fi
+
+      # copy files
+      mkdir -p $AML_IMG_DIR/temp
+      cp $TARGET_IMG/$IMAGE_NAME.kernel $AML_IMG_DIR/boot.img
+      cp -PR $INSTALL_SRC_DIR/upgrade/* $AML_IMG_DIR
+      cp -PR $INSTALL_SRC_DIR/files/* $AML_IMG_DIR
+      cp "$INSTALL/usr/share/bootloader/dtb.img" $AML_IMG_DIR/_aml_dtb.PARTITION
+      cp -f $TARGET_IMG/$IMAGE_NAME.system $AML_IMG_DIR/temp/SYSTEM
+      tools/amltool/mke2img -d $AML_IMG_DIR/temp -b $AMLIMG_SYSTEM_SIZE -G 4 -R 1 -o $TARGET_IMG/system.img.ext4 > /dev/null
+      tools/amltool/img2simg $TARGET_IMG/system.img.ext4 $AML_IMG_DIR/system.img > /dev/null
+      tools/amltool/aml_image_v2_packer_new -r $AML_IMG_DIR/aml_upgrade_package.conf $AML_IMG_DIR $TARGET_IMG/$PROJECT-$DEVICE-$LIBREELEC_VERSION.img
+      rm -f $TARGET_IMG/system.img.ext4
+      rm -f $TARGET_IMG/$IMAGE_NAME.dtb
+      rm -f $TARGET_IMG/$IMAGE_NAME.system
+      rm -f $TARGET_IMG/$IMAGE_NAME.kernel
+    fi
+  fi
+
   # create WeTek Play (Amlogic) ZIP update and auto-install packages if requested
   if [ "$1" = "amlpkg" ]; then
     echo "Creating Amlogic ZIP update package"
@@ -450,6 +500,7 @@ if [ "$1" = "release" -o "$1" = "mkimage" -o "$1" = "amlpkg" -o "$1" = "noobs" ]
     echo --wipe_data >> factory_update_param.aml
     echo --wipe_cache >> factory_update_param.aml
     if [ -f "$INSTALL_SRC_DIR/files/recovery.img" ]; then
+      echo "copy recovery image if any"
       cp $INSTALL_SRC_DIR/files/recovery.img .
     fi
 
@@ -458,16 +509,12 @@ if [ "$1" = "release" -o "$1" = "mkimage" -o "$1" = "amlpkg" -o "$1" = "noobs" ]
     fi
 
     # copy device tree image if any
-    if [ -f "$INSTALL/usr/share/bootloader/dtb.img" ]; then
-      cp "$INSTALL/usr/share/bootloader/dtb.img" .
+    if [ -f "$INSTALL_SRC_DIR/files/dtb_orig.img" ]; then
+      echo "copy original device tree image if any"
+      cp -f "$INSTALL_SRC_DIR/files/dtb_orig.img" dtb.img
     fi
 
     zip -q $TARGET_IMG/$IMAGE_NAME.zip *
-
-    # create sha256 checksum of zip
-    ( cd $TARGET_IMG
-      sha256sum ${IMAGE_NAME}.zip > ${IMAGE_NAME}.zip.sha256
-    )
 
     popd > /dev/null
     popd > /dev/null
@@ -578,10 +625,6 @@ if [ "$1" = "release" -o "$1" = "mkimage" -o "$1" = "amlpkg" -o "$1" = "noobs" ]
     # create release tarball
     tar cf $TARGET_IMG/${IMAGE_NAME}-$1.tar -C $TARGET_IMG ${IMAGE_NAME}-$1
 
-    # create sha256 checksum of tarball
-    ( cd $TARGET_IMG
-      sha256sum ${IMAGE_NAME}-$1.tar > ${IMAGE_NAME}-$1.tar.sha256
-    )
   fi
 
   if [ -d $RELEASE_DIR ]; then
@@ -590,5 +633,5 @@ if [ "$1" = "release" -o "$1" = "mkimage" -o "$1" = "amlpkg" -o "$1" = "noobs" ]
   fi
 
   #cleanup unneeded files
-  [ "$PROJECT" == "Amlogic" ] && rm -rf $TARGET_IMG/$IMAGE_NAME.system $TARGET_IMG/$IMAGE_NAME.kernel
+  rm -rf $TARGET_IMG/$IMAGE_NAME.system $TARGET_IMG/$IMAGE_NAME.kernel
 fi

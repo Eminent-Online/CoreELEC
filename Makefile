@@ -17,6 +17,9 @@ noobs:
 amlpkg:
 	./scripts/image amlpkg
 
+amlimg:
+	./scripts/image amlimg
+
 system_mt:
 	./scripts/image_mt
 

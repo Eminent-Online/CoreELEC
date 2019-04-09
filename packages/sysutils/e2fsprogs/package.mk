@@ -10,7 +10,6 @@ PKG_LICENSE="GPL"
 PKG_SITE="http://e2fsprogs.sourceforge.net/"
 PKG_URL="https://www.kernel.org/pub/linux/kernel/people/tytso/$PKG_NAME/v$PKG_VERSION/$PKG_NAME-$PKG_VERSION.tar.xz"
 PKG_DEPENDS_TARGET="toolchain"
-PKG_DEPENDS_HOST="gcc:host"
 PKG_DEPENDS_INIT="toolchain"
 PKG_LONGDESC="The filesystem utilities for the EXT2 filesystem, including e2fsck, mke2fs, dumpe2fs, fsck, and others."
 PKG_BUILD_FLAGS="-parallel"
@@ -80,6 +79,7 @@ makeinstall_init() {
 
   if [ $INITRAMFS_PARTED_SUPPORT = "yes" ]; then
     cp misc/mke2fs $INSTALL/usr/sbin
+    cp misc/tune2fs $INSTALL/usr/sbin
     ln -sf mke2fs $INSTALL/usr/sbin/mkfs.ext2
     ln -sf mke2fs $INSTALL/usr/sbin/mkfs.ext3
     ln -sf mke2fs $INSTALL/usr/sbin/mkfs.ext4

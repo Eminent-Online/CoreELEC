@@ -21,11 +21,9 @@ PKG_ADDON_TYPE="xbmc.service"
 PKG_ADDON_VERSION="${ADDON_VERSION}.${PKG_REV}"
 
 configure_package() {
-  if [ "$PROJECT" = "Amlogic" ]; then
     PKG_PATCH_DIRS="amlogic"
     PKG_DEPENDS_TARGET="$PKG_DEPENDS_TARGET media_tree_aml"
     PKG_NEED_UNPACK="$PKG_NEED_UNPACK media_tree_aml"
-  fi
 }
 
 pre_make_target() {
@@ -35,21 +33,15 @@ pre_make_target() {
 
 make_target() {
   cp -RP $(get_build_dir media_tree_cc)/* $PKG_BUILD/linux
-  if [ "$PROJECT" = "Amlogic" ]; then
     cp -RP $(get_build_dir media_tree_aml)/* $PKG_BUILD/linux
     echo "obj-y += video_dev/" >> "$PKG_BUILD/linux/drivers/media/platform/meson/Makefile"
     echo "obj-y += dvb-avl/" >> "$PKG_BUILD/linux/drivers/media/platform/meson/Makefile"
     echo "obj-y += wetek/" >> "$PKG_BUILD/linux/drivers/media/platform/meson/Makefile"
-  fi
 
   # make config all
   kernel_make VER=$KERNEL_VER SRCDIR=$(kernel_path) allyesconfig
 
   # hack to workaround media_build bug
-  if [ "$PROJECT" = Rockchip ]; then
-    sed -e 's/CONFIG_DVB_CXD2820R=m/# CONFIG_DVB_CXD2820R is not set/g' -i v4l/.config
-    sed -e 's/CONFIG_DVB_LGDT3306A=m/# CONFIG_DVB_LGDT3306A is not set/g' -i v4l/.config
-  elif [ "$PROJECT" = "Amlogic" ]; then
     sed -e 's/CONFIG_DVB_LGDT3306A=m/# CONFIG_DVB_LGDT3306A is not set/g' -i v4l/.config
     sed -e 's/CONFIG_VIDEO_S5C73M3=m/# CONFIG_VIDEO_S5C73M3 is not set/g' -i $PKG_BUILD/v4l/.config
     sed -e 's/CONFIG_VIDEO_SAA7146_VV=m/# CONFIG_VIDEO_SAA7146_VV is not set/g' -i $PKG_BUILD/v4l/.config
@@ -62,7 +54,6 @@ make_target() {
     sed -e 's/CONFIG_VIDEO_CADENCE_CSI2RX=m/# CONFIG_VIDEO_CADENCE_CSI2RX is not set/g' -i $PKG_BUILD/v4l/.config
     sed -e 's/CONFIG_VIDEO_CADENCE_CSI2TX=m/# CONFIG_VIDEO_CADENCE_CSI2TX is not set/g' -i $PKG_BUILD/v4l/.config
     sed -e 's/# CONFIG_MEDIA_TUNER_TDA18250 is not set/CONFIG_MEDIA_TUNER_TDA18250=m/g' -i $PKG_BUILD/v4l/.config
-  fi
 
   # add menuconfig to edit .config
   kernel_make VER=$KERNEL_VER SRCDIR=$(kernel_path)

@@ -1,0 +1,9 @@
+[Unit]
+Description=update uboot
+
+[Service]
+Type=simple
+ExecStart=/bin/sh -c "/usr/share/bootloader/new_uboot.sh"
+
+[Install]
+WantedBy=basic.target

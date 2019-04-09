@@ -1,0 +1,130 @@
+From e81532be79973a22ccc7d9163ea1af5453352c86 Mon Sep 17 00:00:00 2001
+From: Eminent-Online <info@eminent-online.com>
+Date: Tue, 28 Feb 2017 13:09:17 -0500
+Subject: [PATCH] change logo
+
+---
+ addons/skin.estuary/media/icons/logo-text.png | Bin 1015 -> 3529 bytes
+ addons/skin.estuary/xml/Home.xml              |  10 +---------
+ 2 files changed, 1 insertion(+), 9 deletions(-)
+
+diff --git a/addons/skin.estuary/media/icons/logo-text.png b/addons/skin.estuary/media/icons/logo-text.png
+index d263e42edbb011e1acf8556e479b6396ccf024be..9e293474ba91c0077752a5d72b64175bb44af952 100644
+GIT binary patch
+literal 3529
+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
+DGRwg$
+
+literal 1015
+zcmV<T0|@+yP)<h;3K|Lk000e1NJLTq003|R001Ni1ONa4`}TGr000BNNkl<ZSi{ws
+zOKeP09L8@ALz`eh#UP<2ghZ^Q2uWX7Vuk3~kf`^Hjg`mJD|RH5hNNv`LoDn>yU>}Y
+zswHSE781fjrU_wCk@;CPnfpKY-gED{4`R;QOme^bo%7u}|L3vDF*R~nfwPKB*kh8J
+z8eAQR>EbB`CYhwbQ@S`zoxut@^y34A+@PIBA$W3@AP9OXO}9Y*=9mX2MV5X_o*OLD
+zPnMML8YZJeFFToL#$zsU4i5$PCp$bat&9b3Z;aNM0;k4vnv)cmVMHLm(&9qQ;+pa1
+zt}!dNKqzrVYa}5BuHvo06<F^=)G`=qbA!~z76_1Metdx&C<xR$R(r@BcP#vx^R$p5
+zO_~fXoaeOzG43f*zZ)ITOMjkVf!ir67PQobs9``^vX3pEOk3zva0AqY5a`EK9bI5M
+zzXf8*^J{eo#19Tp<r8KO@k5|HA_;W!T#YL5jPj)(G27E~+GB!^fx%`Y6XK25NCMqF
+zTf+-Xab1yj&(rfwW3-GY(qIsREgHn3A9KV-bAc+)DAU6Utl_>Q@1`a|X9cF+NZ!=J
+zw?{UzK$T~A7=iN~Dbq!*T|E}ArOH@fm2eaNF$7AUoVmbdN<LEJq;`Qik(6yVmS<tH
+zS@73K7O3*nnF(CSM<wI*J9tORxM!i{Sy((Pzk4Kxz(5`+Wiwxt!};DLR@t+wj5{4#
+z;OX+aU9kk(Jl(+p+n97EL$`d$?fkSUw7|ylyTh>r+B_pc0*`CToV{9dJB7=H7MKyy
+zGmgLj9$k9-P5dshMni7@-|5f-)1q*WBQSu+($s9rmFnP?#u6)3;1g=GSi+}3ORUHv
+zYG<5{N}|2@uQ{2Kf8}HV?kY9%i2zINju9qKB@`x3nTH9ljPs7KC01CVzu=Kg*6_l|
+z66-55Rddc2eD<-#sL6J3LdkY-lw{jEw~7DBX^FC2I%q8LU_#}R<Y|l3RXeM-#FVH!
+zDyrah9)$;5OKepdiVX(aDwwnylHxI?oXZ=5+^0P26i>bfHl2!!*N)zFDkjl%l5?$~
+zR4vinHr(XNut~UtIBmmFJYf#SZh;+DNZpO!G0xG%LS`_7g*0)_b!!o}@vGx`6}Ry#
+z=VgJutvp%4P^gys5DOA%-47(ux|cq)Piu+Qm3;Xk5951bi7OpXx4Mq1dyKn0-hXj@
+zX3zDa3e3AaW{NC1O=kdd>`CYXbeH)BXuiBz(>!FqSZuMTop_WUhAHriUlbUohoeSU
+l*!h4f>`o47*7WAd{{i!$1IJeHOfvug002ovPDHLkV1g`u;wS(B
+
+diff --git a/addons/skin.estuary/xml/Home.xml b/addons/skin.estuary/xml/Home.xml
+index 248b4ae..20786c2 100644
+--- a/addons/skin.estuary/xml/Home.xml
++++ b/addons/skin.estuary/xml/Home.xml
+@@ -953,16 +953,8 @@
+				<left>90</left>
+				<control type="image">
+					<aspectratio>keep</aspectratio>
+-					<width>56</width>
++					<width>247</width>
+					<height>56</height>
+-					<texture colordiffuse="button_focus">icons/logo.png</texture>
+-				</control>
+-				<control type="image">
+-					<left>40</left>
+-					<top>10</top>
+-					<aspectratio>keep</aspectratio>
+-					<width>192</width>
+-					<height>36</height>
+					<texture>icons/logo-text.png</texture>
+				</control>
+			</control>
+--
+1.9.1

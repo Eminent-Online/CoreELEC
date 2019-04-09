@@ -1,0 +1,5 @@
+    KERNEL_UBOOT_EXTRA_TARGET="gxl_p212_1g.dtb gxl_p212_2g.dtb"
+    AMLIMG_SYSTEM_SIZE="1048576"
+
+  # add OOTB support for Wetek Play 2 IR remote
+    IR_REMOTE_KEYMAPS="$IR_REMOTE_KEYMAPS em7680"

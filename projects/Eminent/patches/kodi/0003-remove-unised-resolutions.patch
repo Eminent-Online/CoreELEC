@@ -1,0 +1,32 @@
+From 4af76597e41d2146d607ed7748e5d04c77483c58 Mon Sep 17 00:00:00 2001
+From: Eminent-Online <info@eminent-online.com>
+Date: Fri, 8 Mar 2019 22:22:23 +0300
+Subject: [PATCH] remove unused resolution
+
+---
+ xbmc/utils/AMLUtils.cpp | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/xbmc/utils/AMLUtils.cpp b/xbmc/utils/AMLUtils.cpp
+index fe1dae0..fcbdd37 100644
+--- a/xbmc/utils/AMLUtils.cpp
++++ b/xbmc/utils/AMLUtils.cpp
+@@ -501,6 +501,8 @@ bool aml_probe_resolutions(std::vector<RESOLUTION_INFO> &resolutions)
+   RESOLUTION_INFO res;
+   for (std::vector<std::string>::const_iterator i = probe_str.begin(); i != probe_str.end(); ++i)
+   {
++    if ((StringUtils::StartsWith(i->c_str(), "2160")) || (StringUtils::StartsWith(i->c_str(), "1080")) || (StringUtils::StartsWith(i->c_str(), "720")))
++      {
+     if (((StringUtils::StartsWith(i->c_str(), "4k2k")) && (aml_support_h264_4k2k() > AML_NO_H264_4K2K)) || !(StringUtils::StartsWith(i->c_str(), "4k2k")))
+     {
+       if (aml_mode_to_resolution(i->c_str(), &res))
+@@ -522,6 +524,7 @@ bool aml_probe_resolutions(std::vector<RESOLUTION_INFO> &resolutions)
+         }
+       }
+     }
++   }
+   }
+   return resolutions.size() > 0;
+ }
+--
+2.7.4

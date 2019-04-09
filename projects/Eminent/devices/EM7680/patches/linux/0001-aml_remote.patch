@@ -1,0 +1,24 @@
+diff --git a/arch/arm64/boot/dts/amlogic/mesongxl.dtsi b/arch/arm64/boot/dts/amlogic/mesongxl.dtsi
+index 41c5cc7..1cfc8b0 100644
+--- a/arch/arm64/boot/dts/amlogic/mesongxl.dtsi
++++ b/arch/arm64/boot/dts/amlogic/mesongxl.dtsi
+@@ -761,7 +761,7 @@
+	aml_remote:meson-remote {
+		compatible = "amlogic, aml_remote";
+		dev_name = "meson-remote";
+-		status = "disabled";
++		status = "okay";
+		remote_ao_offset = <0x580>; /* 0x400 + (0x20 + idx)<<2 -- old ; 0x400 + (0x60 +idx)<<2 --new   */
+		interrupts = <0 196 1>;
+		pinctrl-names = "default";
+@@ -769,7 +769,7 @@
+	};
+	meson_ir:meson-ir {
+		compatible = "amlogic,meson-gxbb-ir";
+-		status = "okay";
++		status = "disabled";
+		reg = <0x0 0xc8100580 0x0 0x40>;
+		interrupts = <0 196 1>;
+		pinctrl-names = "default";
+--
+2.7.4

@@ -12,9 +12,7 @@ PKG_URL="https://github.com/systemd/systemd/archive/v$PKG_VERSION.tar.gz"
 PKG_DEPENDS_TARGET="toolchain libcap kmod util-linux entropy"
 PKG_LONGDESC="A system and session manager for Linux, compatible with SysV and LSB init scripts."
 
-if [ "$PROJECT" = "Amlogic" ]; then
-  PKG_PATCH_DIRS="amlogic"
-fi
+PKG_PATCH_DIRS="amlogic"
 
 PKG_MESON_OPTS_TARGET="--libdir=/usr/lib \
                        -Drootprefix=/usr \

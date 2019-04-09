@@ -1,0 +1,11 @@
+diff --git a/addon.xml b/addon.xml
+index a4a4e05..9f036e2 100644
+--- a/addon.xml
++++ b/addon.xml
+@@ -1,5 +1,5 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+-<addon id="skin.confluence" version="4.6.3" name="Confluence" provider-name="Jezz_X, Team Kodi">
++<addon id="skin.confluence" version="9.6.3" name="Confluence" provider-name="Jezz_X, Team Kodi">
+	<requires>
+		<import addon="xbmc.gui" version="5.12.0"/>
+	</requires>

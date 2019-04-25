@@ -11,24 +11,6 @@ index 99b3020..14561ef 100644
        <escape mod="longpress">Back</escape>
        <i>Info</i>
        <menu>ContextMenu</menu>
-@@ -94,7 +94,7 @@
-       <backslash>ToggleFullScreen</backslash>
-       <home>FirstPage</home>
-       <end>LastPage</end>
--      <power>ActivateWindow(ShutdownMenu)</power>
-+      <power>ShutDown()</power>
-       <sleep>ActivateWindow(ShutdownMenu)</sleep>
-       <!-- PVR windows -->
-       <e>ActivateWindow(TVGuide)</e>
-@@ -167,6 +167,8 @@
-       <k mod="ctrl,shift">ReloadKeymaps</k>
-       <d mod="ctrl,shift">ToggleDebug</d>
-       <r mod="ctrl,shift">ToggleDirtyRegionVisualization</r>
-+      <!-- fix shutdown on CEC wakeup -->
-+      <key id="61662"></key>
-     </keyboard>
-   </global>
-   <LoginScreen>
 @@ -194,6 +196,7 @@
        <browser_back>Backspace</browser_back>
        <browser_back mod="longpress">PreviousMenu</browser_back>

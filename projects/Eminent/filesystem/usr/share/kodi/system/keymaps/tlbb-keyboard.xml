@@ -2,7 +2,7 @@
 <keymap>
         <global>
                 <keyboard>
-                        <!-- <power>ActivateWindow(ShutdownMenu)</power>  -->                                                  <!-- Button 01 : Power -->
+                        <power>Shutdown</power>                                                  <!-- Button 01 : Power -->
                         <volume_mute>Mute</volume_mute>                                                                                                         <!-- Button 02 : Mute -->
                         <comma>Seek(-10)</comma>                                                                           <!-- Button 03 : SkipPrevious -->
                         <play_pause>playpause</play_pause>                                                                         <!-- Button 04 : Play/Pause -->

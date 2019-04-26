@@ -167,7 +167,7 @@
     <setting id="pictures.showvideos" default="true">true</setting>
     <setting id="pictures.usetags" default="true">true</setting>
     <setting id="powermanagement.displaysoff" default="true">0</setting>
-    <setting id="powermanagement.shutdownstate">3</setting>
+    <setting id="powermanagement.shutdownstate">1</setting>
     <setting id="powermanagement.shutdowntime" default="true">0</setting>
     <setting id="powermanagement.waitfornetwork">5</setting>
     <setting id="powermanagement.wakeonaccess" default="true">false</setting>
@@ -329,7 +329,7 @@
     <setting id="videoscreen.noofbuffers" default="true">2</setting>
     <setting id="videoscreen.preferedstereoscopicmode" default="true">100</setting>
     <setting id="videoscreen.stereoscopicmode" default="true">0</setting>
-    <setting id="videoscreen.whitelist" default="true"></setting>
+    <setting id="videoscreen.whitelist">0384002160060.00000pstd,0384002160059.94006pstd,0384002160050.00000pstd,0384002160030.00000pstd,0384002160029.97003pstd,0384002160025.00000pstd,0384002160024.00000pstd,0384002160023.97602pstd,0192001080060.00000pstd,0192001080059.94006pstd,0192001080050.00000pstd,0192001080030.00000pstd,0192001080029.97003pstd,0192001080025.00000pstd,0192001080024.00000pstd,0192001080023.97602pstd,0128000720059.94006pstd,0128000720050.00000pstd</setting>
     <setting id="weather.addon">weather.yahoo</setting>
     <setting id="weather.currentlocation" default="true">1</setting>
     <setting id="window.height" default="true">480</setting>

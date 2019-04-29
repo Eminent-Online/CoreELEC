@@ -32,5 +32,4 @@ makeinstall_target() {
 
 post_install() {
   enable_service amlogic-remotecfg.service
-  enable_service amlogic-remote-toggle.service
 }
